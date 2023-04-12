@@ -9,7 +9,6 @@ import SwiftUI
 
 @main
 struct NewsApp: App {
-    @StateObject var viewModel = ViewModel()
     var body: some Scene {
         WindowGroup {
             TabView {
@@ -26,7 +25,6 @@ struct NewsApp: App {
                         Label("Websites", systemImage: "globe")
                     }
             }
-            .environmentObject(viewModel)
         }
     }
 }

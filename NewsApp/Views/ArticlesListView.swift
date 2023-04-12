@@ -33,7 +33,7 @@ struct ArticlesListView: View {
 }
 
 struct ArticlesListView_Previews: PreviewProvider {
-    @State static private var articles = sampleArticles
+    @State static private var articles = Article.sampleArticles
     static var previews: some View {
         ArticlesListView(articles: $articles, showingArticles: .constant(true))
     }

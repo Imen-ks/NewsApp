@@ -66,6 +66,6 @@ struct ArticleDetailView: View {
 
 struct ArticleDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        ArticleDetailView(article: sampleArticles[0])
+        ArticleDetailView(article: Article.sampleArticle1)
     }
 }

@@ -1,19 +1,18 @@
 //
-//  ArticleShortSummaryView.swift
+//  ArticleSummaryView.swift
 //  NewsApp
 //
-//  Created by Imen Ksouri on 06/04/2023.
+//  Created by Imen Ksouri on 05/04/2023.
 //
 
 import SwiftUI
 
-struct ArticleShortSummaryView: View {
-    var headline: Article
-
+struct ArticleSummaryView: View {
+    var article: Article
+    
     var body: some View {
-        
         VStack {
-            if let media = headline.media?.replacing("http://", with: "https://") {
+            if let media = article.media?.replacing("http://", with: "https://") {
                 AsyncImage(url: URL(string: media)) { image in
                     image
                         .resizable()
@@ -24,7 +23,7 @@ struct ArticleShortSummaryView: View {
                         .foregroundColor(.gray)
                         .frame(minHeight: 150)
                 }
-                .frame(maxWidth: 200, maxHeight: 100)
+                .frame(minWidth: 300, maxHeight: 150)
                 .cornerRadius(10, corners: [.topLeft, .topRight])
             } else {
                 Rectangle()
@@ -34,28 +33,30 @@ struct ArticleShortSummaryView: View {
             }
                         
             VStack {
-                if let title = headline.title {
+                if let title = article.title {
                     Text(title)
-                        .font(.headline).bold()
+                        .font(.title2).bold()
                         .padding(.bottom, 1)
+                }
+                if let excerpt = article.excerpt {
+                    Text(excerpt)
                 }
             }
             .cornerRadius(10, corners: [.bottomLeft, .bottomRight])
-            .frame(maxWidth: 200, minHeight: 100)
+            .frame(minWidth: 330)
             .foregroundColor(.black)
             .padding(.bottom, 8)
         }
         .overlay(RoundedRectangle(cornerRadius: 10)
             .stroke(Color.black, lineWidth: 0.3))
-        .fixedSize(horizontal: false, vertical: false)
-        .padding(.bottom, 5)
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 
-struct ArticleShortSummaryView_Previews: PreviewProvider {
+struct ArticleSummaryView_Previews: PreviewProvider {
     static var previews: some View {
         ScrollView {
-            ArticleShortSummaryView(headline: sampleHeadlines[0])
+            ArticleSummaryView(article: Article.sampleArticle1)
         }
     }
 }

@@ -29,7 +29,7 @@ struct SourcesListView: View {
 }
 
 struct SourcesListView_Previews: PreviewProvider {
-    @State static private var sources = sampleSources
+    @State static private var sources = Article.sampleSources
     static var previews: some View {
         SourcesListView(sources: $sources, showingSources: .constant(true))
     }

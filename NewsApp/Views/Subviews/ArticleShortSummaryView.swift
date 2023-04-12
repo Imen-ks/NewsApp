@@ -1,18 +1,19 @@
 //
-//  ArticleSummaryView.swift
+//  ArticleShortSummaryView.swift
 //  NewsApp
 //
-//  Created by Imen Ksouri on 05/04/2023.
+//  Created by Imen Ksouri on 06/04/2023.
 //
 
 import SwiftUI
 
-struct ArticleSummaryView: View {
-    var article: Article
-    
+struct ArticleShortSummaryView: View {
+    var headline: Article
+
     var body: some View {
+        
         VStack {
-            if let media = article.media?.replacing("http://", with: "https://") {
+            if let media = headline.media?.replacing("http://", with: "https://") {
                 AsyncImage(url: URL(string: media)) { image in
                     image
                         .resizable()
@@ -21,42 +22,40 @@ struct ArticleSummaryView: View {
                 } placeholder: {
                     Rectangle()
                         .foregroundColor(.gray)
-                        .frame(minHeight: 150)
+                        .frame(minHeight: 100)
                 }
-                .frame(minWidth: 300, maxHeight: 150)
+                .frame(maxWidth: 200, maxHeight: 100)
                 .cornerRadius(10, corners: [.topLeft, .topRight])
             } else {
                 Rectangle()
                     .foregroundColor(.gray)
-                    .frame(minHeight: 150)
+                    .frame(minHeight: 100)
                     .cornerRadius(10, corners: [.topLeft, .topRight])
             }
                         
             VStack {
-                if let title = article.title {
+                if let title = headline.title {
                     Text(title)
-                        .font(.title2).bold()
+                        .font(.headline).bold()
                         .padding(.bottom, 1)
-                }
-                if let excerpt = article.excerpt {
-                    Text(excerpt)
                 }
             }
             .cornerRadius(10, corners: [.bottomLeft, .bottomRight])
-            .frame(minWidth: 330)
+            .frame(maxWidth: 200, minHeight: 100)
             .foregroundColor(.black)
             .padding(.bottom, 8)
         }
         .overlay(RoundedRectangle(cornerRadius: 10)
             .stroke(Color.black, lineWidth: 0.3))
-        .fixedSize(horizontal: false, vertical: true)
+        .fixedSize(horizontal: false, vertical: false)
+        .padding(.bottom, 5)
     }
 }
 
-struct ArticleSummaryView_Previews: PreviewProvider {
+struct ArticleShortSummaryView_Previews: PreviewProvider {
     static var previews: some View {
         ScrollView {
-            ArticleSummaryView(article: sampleArticles[0])
+            ArticleShortSummaryView(headline: Article.sampleHeadline1)
         }
     }
 }

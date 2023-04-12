@@ -71,7 +71,7 @@ struct LatestHeadlinesListView: View {
 }
 
 struct LatestHeadlinesListView_Previews: PreviewProvider {
-    @State static private var headlines = sampleHeadlines
+    @State static private var headlines = Article.sampleHeadlines
     static var previews: some View {
         LatestHeadlinesListView(headlines: $headlines, showingLatestHeadlines: .constant(true))
     }

@@ -8,13 +8,15 @@
 import SwiftUI
 
 struct SearchSourcesView: View {
-    @EnvironmentObject var viewModel: ViewModel
+    @ObservedObject var viewModel: ViewModelSources = ViewModelSources()
     @State private var sources: [String] = []
     @State private var country: Country = .ALL
     @State private var language: Language = .all
     @State private var topic: Topic = .all
     @State private var showAlert = false
     @State private var showingSources = false
+    @State var isSearchingLatestHeadlines = false
+    @State var isSearchingSources = true
     
     var countryParam: String {
         String(describing: country)
@@ -31,26 +33,7 @@ struct SearchSourcesView: View {
         NavigationStack {
             Form {
                 Section("SOURCES SELECTION CRITERIA") {
-                    Picker("Topic", selection: $topic) {
-                        ForEach(Topic.allCases, id: \.self) { topic in
-                            Text(topic.rawValue.capitalized)
-                        }
-                    }
-                    .pickerStyle(.navigationLink)
-                    
-                    Picker("Publisher Country", selection: $country) {
-                        ForEach(Country.allCases.sorted { $0.rawValue < $1.rawValue }, id: \.self) { country in
-                            Text(country.rawValue)
-                        }
-                    }
-                    .pickerStyle(.navigationLink)
-                    
-                    Picker("Article Language", selection: $language) {
-                        ForEach(Language.allCases.sorted { $0.rawValue < $1.rawValue }, id: \.self) { language in
-                            Text(language.rawValue)
-                        }
-                    }
-                    .pickerStyle(.navigationLink)
+                    SearchForm(topic: $topic, country: $country, language: $language, isSearchingLatestHeadlines: $isSearchingLatestHeadlines, isSearchingSources: $isSearchingSources)
                     
                 }
                 .padding(5)
@@ -60,10 +43,10 @@ struct SearchSourcesView: View {
                             showAlert = true
                         } else {
                             showingSources.toggle()
-                            viewModel.updateSourcesRequestParams(language: languageParam, country: countryParam, topic: topicParam)
+                            viewModel.updateParams(language: languageParam, country: countryParam, topic: topicParam)
                             Task {
                                 do {
-                                    if let newsApiResponse = try await viewModel.loadSources() {
+                                    if let newsApiResponse = try await viewModel.sources {
                                         sources = newsApiResponse.sources
                                     }
                                 } catch{
@@ -91,6 +74,5 @@ struct SearchSourcesView: View {
 struct SearchSourcesView_Previews: PreviewProvider {
     static var previews: some View {
         SearchSourcesView()
-            .environmentObject(ViewModel())
     }
 }

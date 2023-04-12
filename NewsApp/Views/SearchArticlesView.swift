@@ -5,14 +5,10 @@
 //  Created by Imen Ksouri on 04/04/2023.
 //
 
-enum DateSelection: String, CaseIterable {
-    case yes, no
-}
-
 import SwiftUI
 
 struct SearchArticlesView: View {
-    @EnvironmentObject var viewModel: ViewModel
+    @ObservedObject var viewModel: ViewModelSearchArticles = ViewModelSearchArticles()
     @State private var articles: [Article] = []
     @State private var keyword = ""
     @State private var dateFrom = Date()
@@ -22,6 +18,7 @@ struct SearchArticlesView: View {
     @State private var language: Language = .all
     @State private var showAlert = false
     @State private var showingArticles = false
+    @State var isSearchingArticles = true
     
     var dateFromParam: String {
         dateSelection == .no ? "no" : getDate(from: dateFrom)
@@ -40,41 +37,7 @@ struct SearchArticlesView: View {
         NavigationStack {
             Form {
                 Section("ARTICLES SELECTION CRITERIA") {
-                    TextField("Keyword (required)", text: $keyword)
-                        .autocorrectionDisabled()
-                    
-                    Text("Would you like to filter out the articles by their published date ?")
-                    
-                    Picker("Date selection", selection: $dateSelection) {
-                        ForEach(DateSelection.allCases, id: \.self) { selection in
-                            Text(selection.rawValue)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    
-                    if dateSelection == .yes {
-                        DatePicker(selection: $dateFrom, in: ...Date.now, displayedComponents: .date) {
-                            Text("Date from")
-                        }
-                        
-                        DatePicker(selection: $dateTo, in: ...Date.now, displayedComponents: .date) {
-                            Text("Date to")
-                        }
-                    }
-                    
-                    Picker("Publisher Country", selection: $country) {
-                        ForEach(Country.allCases.sorted { $0.rawValue < $1.rawValue }, id: \.self) { country in
-                            Text(country.rawValue)
-                        }
-                    }
-                    .pickerStyle(.navigationLink)
-                    
-                    Picker("Article Language", selection: $language) {
-                        ForEach(Language.allCases.sorted { $0.rawValue < $1.rawValue }, id: \.self) { language in
-                            Text(language.rawValue)
-                        }
-                    }
-                    .pickerStyle(.navigationLink)
+                    SearchForm(keyword: $keyword, dateFrom: $dateFrom, dateTo: $dateTo, dateSelection: $dateSelection, country: $country, language: $language, isSearchingArticles: $isSearchingArticles)
                 }
                 .padding(5)
                 Section {
@@ -83,10 +46,10 @@ struct SearchArticlesView: View {
                             showAlert = true
                         } else {
                             showingArticles.toggle()
-                            viewModel.updateSearchArticlesRequestParams(keyword: keyword, from: dateFromParam, to: dateToParam, language: languageParam, country: countryParam)
+                            viewModel.updateParams(keyword: keyword, from: dateFromParam, to: dateToParam, language: languageParam, country: countryParam)
                             Task {
                                 do {
-                                    if let newsApiResponse = try await viewModel.loadSearchedArticles() {
+                                    if let newsApiResponse = try await viewModel.articles {
                                         articles = newsApiResponse.articles
                                     }
                                 } catch{
@@ -123,6 +86,5 @@ struct SearchArticlesView: View {
 struct SearchArticlesView_Previews: PreviewProvider {
     static var previews: some View {
         SearchArticlesView()
-            .environmentObject(ViewModel())
     }
 }
