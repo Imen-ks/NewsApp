@@ -8,9 +8,12 @@
 import Foundation
 
 struct Api {
-    let root: String = "https://api.newscatcherapi.com/v2/"
+    static let apiKey = "x-api-key"
+    static let apiValue = Bundle.main.object(forInfoDictionaryKey: "X_API_KEY") as? String ?? ""
+    static let root = "https://api.newscatcherapi.com/v2/"
+    
     var parameters: [String: String?]
-    var header: [String: String] = ["x-api-key": Bundle.main.object(forInfoDictionaryKey: "X_API_KEY") as? String ?? ""]
+    var headers: [String: String]?
 }
 
 enum Endpoint: String {
