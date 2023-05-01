@@ -4,7 +4,9 @@ Xcode project relating to an iOS application using the [NewsCatcher API](https:/
 
 ## Usage
 
-Open the `NewsApp.xcodeproj` file with Xcode and build the application in the simulator or on a device.
+Request for an API key by creating an account on the Newscatcher API website.  
+Open the `NewsApp.xcodeproj` file with Xcode, add a `.config` file containing the following line: `X_API_KEY = <YOUR_API_KEY>`  
+Build the application in the simulator or on a device.
 
 ## API endpoints used in the app
 
