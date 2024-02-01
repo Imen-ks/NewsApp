@@ -1,5 +1,7 @@
 # News Application
 
+![featured](https://github.com/Imen-ks/NewsApp/blob/main/NewsApp/Assets.xcassets/News.png)
+
 Xcode project relating to an iOS application using the [NewsCatcher API](https://newscatcherapi.com/) to display multi-language worldwide news articles published online.
 
 ## Usage
